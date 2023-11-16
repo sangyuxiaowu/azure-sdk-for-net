@@ -290,7 +290,13 @@ function BuildDeploymentOutputs([string]$serviceName, [object]$azContext, [objec
         }
     }
 
-    return $deploymentOutputs
+    # Force capitalize all keys to avoid devops confusion with variable auto-capitalization
+    $capitalized = @{}
+    foreach ($item in $deploymentOutputs.GetEnumerator()) {
+        $capitalized[$item.Name.ToUpperInvariant()] = $item.Value
+    }
+
+    return $capitalized
 }
 
 function SetDeploymentOutputs(
